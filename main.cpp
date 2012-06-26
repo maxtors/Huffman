@@ -1,8 +1,9 @@
 // ---------- INCLUDES --------------------------------------------------------
 #include <iostream>
+#include "Huffman.h"
 
 // ---------- MAIN ------------------------------------------------------------
 int main() {
-	system("pause");
+	Huffman h("aaaabbc");
 	return 0;
 }
