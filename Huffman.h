@@ -8,20 +8,20 @@
 #include "Node.h"
 
 // ---------- TYPEDEFS --------------------------------------------------------
-typedef std::map<std::string, std::vector<bool>> Encode_map;
+typedef std::map<char, std::vector<bool>> Encode_map;
 typedef std::map<char, double> Frequencies;
 
 // ---------- HUFFMAN CLASS ---------------------------------------------------
 class Huffman {
 private:
-	Encode_map*	 encoded;
-	Frequencies* frequencies;
+    Encode_map*	 encoded;
+    Frequencies* frequencies;
 
-	Frequencies* getFrequencies(std::string s);
+    Frequencies* getFrequencies(std::string s);
 
 public:
-	Huffman(std::string s);
-	~Huffman();
+    Huffman(std::string s);
+    ~Huffman();
 };
 
 #endif

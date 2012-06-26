@@ -4,6 +4,6 @@
 
 // ---------- MAIN ------------------------------------------------------------
 int main() {
-	Huffman h("aaaabbc");
-	return 0;
+    Huffman h("aaaabbc");
+    return 0;
 }
