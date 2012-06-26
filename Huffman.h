@@ -14,6 +14,7 @@ typedef std::map<char, double> Frequencies;
 // ---------- HUFFMAN CLASS ---------------------------------------------------
 class Huffman {
 private:
+    Node*        tree;
     Encode_map*	 encoded;
     Frequencies* frequencies;
 
@@ -22,6 +23,8 @@ private:
 public:
     Huffman(std::string s);
     ~Huffman();
+
+    void buildTree();
 };
 
 #endif

@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm>
 #include "Huffman.h"
+#include "Node.h"
 
 
 // ---------- CONSTRUCTOR -----------------------------------------------------
@@ -44,4 +45,35 @@ Frequencies* Huffman::getFrequencies(std::string s) {
 
     // Return the mapping of character frequencies
     return f;
+}
+
+void Huffman::buildTree() {
+    std::vector<Node*> leafnodes;
+    Node* newnode;
+    Frequencies temp = *frequencies;
+    Frequencies::iterator f_it, lowest;
+
+    while (!temp.empty()) {   
+
+        f_it = temp.begin();
+        lowest = f_it;
+
+        while (f_it != temp.end()) {
+
+            if (f_it->second < lowest->second) {
+                lowest = f_it;
+            }
+            ++f_it;
+        }
+        newnode = new LeafNode(lowest->second, lowest->first);
+        leafnodes.push_back(newnode);
+        temp.erase(lowest);
+    }
+
+    /*
+        VED DETTE PUNKTET SÅ HAR JEG EN VECTOR
+        AV NODE* SOM INNEHOLDER HVERT LEAFNODE
+        SORTERT FRA DE MED MINST FREQ FØRST TIL
+        DE MED STØRST FREQ SIST...
+    */
 }
