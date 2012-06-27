@@ -8,7 +8,7 @@
 
 // ---------- CONSTRUCTOR -----------------------------------------------------
 Huffman::Huffman(std::string s) {
-    encoded	    = new Encode_map;
+    encoded	= new Encode_map;
     frequencies = getFrequencies(s);
 }
 
@@ -53,11 +53,13 @@ void Huffman::buildTree() {
     Frequencies temp = *frequencies;
     Frequencies::iterator f_it, lowest;
 
+    // Loop til map is empty
     while (!temp.empty()) {   
 
         f_it = temp.begin();
         lowest = f_it;
 
+        // Loop through all the elements
         while (f_it != temp.end()) {
 
             if (f_it->second < lowest->second) {
@@ -65,15 +67,17 @@ void Huffman::buildTree() {
             }
             ++f_it;
         }
+        
+        // Create new leafnode and add to vector
         newnode = new LeafNode(lowest->second, lowest->first);
         leafnodes.push_back(newnode);
         temp.erase(lowest);
     }
 
     /*
-        VED DETTE PUNKTET SÅ HAR JEG EN VECTOR
+        VED DETTE PUNKTET Sï¿½ HAR JEG EN VECTOR
         AV NODE* SOM INNEHOLDER HVERT LEAFNODE
-        SORTERT FRA DE MED MINST FREQ FØRST TIL
-        DE MED STØRST FREQ SIST...
+        SORTERT FRA DE MED MINST FREQ Fï¿½RST TIL
+        DE MED STï¿½RST FREQ SIST...
     */
 }
