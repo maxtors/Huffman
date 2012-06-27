@@ -47,6 +47,12 @@ Frequencies* Huffman::getFrequencies(std::string s) {
     return f;
 }
 
+// ---------- SORT THE LIST OF NODES ------------------------------------------
+void Huffman::Sort(std::vector<Node*>& v) {
+	
+}
+
+// ---------- BUILD THE HUFFMAN TREE ------------------------------------------
 void Huffman::buildTree() {
     std::vector<Node*> leafnodes;
     Node* newnode;
