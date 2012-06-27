@@ -9,7 +9,7 @@
 
 // ---------- CONSTRUCTOR -----------------------------------------------------
 Huffman::Huffman(std::string s) {
-    encoded	    = new Encode_map;
+    encoded	    = new std::map<char, std::vector<bool>>;
     frequencies = getFrequencies(s);
 }
 
@@ -20,9 +20,9 @@ Huffman::~Huffman() {
 }
 
 // ---------- GET FREQUENCY OF EACH CHAR --------------------------------------
-Frequencies* Huffman::getFrequencies(std::string s) {
-    Frequencies*            f = new Frequencies;
-    Frequencies::iterator   f_it;
+std::map<char, double>* Huffman::getFrequencies(std::string s) {
+    std::map<char, double>*             f = new std::map<char, double>;
+    std::map<char, double>::iterator    f_it;
 	
     // Loop through the parameter string, and treat each character
     for (unsigned int i = 0; i < s.length(); i++) {
@@ -35,8 +35,7 @@ Frequencies* Huffman::getFrequencies(std::string s) {
     // Get percentage frequency of each character
     f_it = f->begin();
     while (f_it != f->end()) {
-        (*f)[(f_it)->first] /= s.size();
-        f_it++;
+        (*f)[f_it->first] /= s.size();  f_it++;
     }
 
     // Return the mapping of character frequencies
@@ -63,11 +62,10 @@ void Huffman::Sort(std::vector<Node*>& v) {
 
 // ---------- BUILD THE HUFFMAN TREE ------------------------------------------
 void Huffman::buildTree() {
-    std::vector<Node*>      nodes;
-    std::vector<bool>       bits;
-    Node*                   n1, *n2;
-    Frequencies             temp = *frequencies;
-    Frequencies::iterator   f_it, lowest;
+    std::vector<Node*>                  nodes;
+    std::vector<bool>                   bits;
+    std::map<char, double>              temp = *frequencies;
+    std::map<char, double>::iterator    f_it, lowest;
 
     // Loop til map is empty
     while (!temp.empty()) {
@@ -95,14 +93,14 @@ void Huffman::buildTree() {
     }
 
     // Set tree pointer, and fill the tree...
-    tree = nodes.at(0);
+    tree = nodes.front();
     tree->fill(*encoded, bits);
 }
 
 // ---------- SHOW THE HUFFMAN TREE -------------------------------------------
 void Huffman::showTree() {
-    Encode_map::iterator        e_it;
-    std::vector<bool>::iterator b_it;
+    std::map<char, std::vector<bool>>::iterator     e_it;
+    std::vector<bool>::iterator                     b_it;
 
     // Loop through all the characters
     for (e_it = encoded->begin(); e_it != encoded->end(); e_it++) {

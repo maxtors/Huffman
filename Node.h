@@ -6,9 +6,6 @@
 #include <vector>
 #include <string>
 
-// ---------- TYPEDEFS --------------------------------------------------------
-typedef std::map<char, std::vector<bool>> Encode_map;
-
 // ---------- NODE CLASS ------------------------------------------------------
 class Node {
 protected:
@@ -18,8 +15,9 @@ protected:
 public:
     Node()			{}
     virtual ~Node()	{}
-    virtual void fill(Encode_map& enc, std::vector<bool>& bits) = 0;
     double getFrequency();
+    virtual void fill(std::map<char, std::vector<bool>>& enc,
+        std::vector<bool>& bits) = 0;
 };
 
 // ---------- LEAFNODE CLASS --------------------------------------------------
@@ -29,7 +27,8 @@ private:
 public:
     LeafNode(double f, char d);
     ~LeafNode() {}
-    void fill(Encode_map& enc, std::vector<bool>& bits);
+    void fill(std::map<char, std::vector<bool>>& enc,
+        std::vector<bool>& bits);
 };
 
 // ---------- BINDNODE CLASS --------------------------------------------------
@@ -38,7 +37,8 @@ private:
 public:
     BindNode(Node* l, Node* r);
     ~BindNode();
-    void fill(Encode_map& enc, std::vector<bool>& bits);
+    void fill(std::map<char, std::vector<bool>>& enc,
+        std::vector<bool>& bits);
 };
 
 #endif
