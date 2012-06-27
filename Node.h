@@ -28,7 +28,7 @@ private:
     char data;
 public:
     LeafNode(double f, char d);
-    ~LeafNode()		{}
+    ~LeafNode() {}
     void fill(Encode_map& enc, std::vector<bool>& bits);
 };
 
