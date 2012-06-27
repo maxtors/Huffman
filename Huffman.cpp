@@ -8,15 +8,25 @@
 
 
 // ---------- CONSTRUCTOR ---------------------------------------------------------------
-Huffman::Huffman(std::string s) {
+Huffman::Huffman() {
     encoded     = new std::map<char, std::vector<bool>>;
-    frequencies = getFrequencies(s);
+    frequencies = NULL;
 }
 
 // ---------- DECONSTRUCTOR -------------------------------------------------------------
 Huffman::~Huffman() {
     delete encoded;
     delete frequencies;
+}
+
+// ---------- ENCODE STRING -------------------------------------------------------------
+void Huffman::encode(std::string s) {
+
+}
+
+// ---------- DECODE STRING -------------------------------------------------------------
+void Huffman::decode(std::string s) {
+
 }
 
 // ---------- GET FREQUENCY OF EACH CHAR ------------------------------------------------
@@ -56,7 +66,7 @@ void Huffman::Sort(std::vector<Node*>& v) {
                 swap = true;
             }
         }
-        n -= 1;
+        --n;
     }
 }
 

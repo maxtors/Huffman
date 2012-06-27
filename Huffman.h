@@ -11,16 +11,18 @@
 class Huffman {
 private:
     Node*                               tree;
+    std::string                         decoded;
     std::map<char, std::vector<bool>>*  encoded;
     std::map<char, double>*             frequencies;
     std::map<char, double>*             getFrequencies(std::string s);
-    void                                Sort(std::vector<Node*>& v);
-
-public:
-    Huffman(std::string s);
-    ~Huffman();
+    void Sort(std::vector<Node*>& v);
     void buildTree();
     void showTree();
+public:
+    Huffman();
+    ~Huffman();
+    void encode(std::string s);
+    void decode(std::string s);
 };
 
 #endif

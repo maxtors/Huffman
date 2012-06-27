@@ -4,9 +4,8 @@
 
 // ---------- MAIN ----------------------------------------------------------------------
 int main() {
-    Huffman h("ERDBEERE");
-    h.buildTree();
-    h.showTree();
+    Huffman h;
+    h.encode("ERDBEERE");
     system("pause");
     return 0;
 }
