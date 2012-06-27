@@ -1,13 +1,13 @@
 #ifndef HUFFMAN_H
 #define HUFFMAN_H
 
-// ---------- INCLUDES --------------------------------------------------------
+// ---------- INCLUDES ------------------------------------------------------------------
 #include <map>
 #include <vector>
 #include <string>
 #include "Node.h"
 
-// ---------- HUFFMAN CLASS ---------------------------------------------------
+// ---------- HUFFMAN CLASS -------------------------------------------------------------
 class Huffman {
 private:
     Node*                               tree;
