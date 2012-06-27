@@ -49,7 +49,23 @@ Frequencies* Huffman::getFrequencies(std::string s) {
 
 // ---------- SORT THE LIST OF NODES ------------------------------------------
 void Huffman::Sort(std::vector<Node*>& v) {
+	bool 	swap = true;
+	int 	n 	 = v.size();
+	Node* 	temp;
 	
+	// Simple bubble sort
+	while (swap) {	
+	    swap = false;
+	    for (int i = 1; i < n - 1; i++) {
+	    	if (v[i-1] > v[i]) {
+	    		temp = v[i];
+	    		v[i] = v[i-1];
+	    		v[i-1] = temp;
+	    		swap = true;
+	    	}
+	    }
+	    n -= 1;
+	}
 }
 
 // ---------- BUILD THE HUFFMAN TREE ------------------------------------------
