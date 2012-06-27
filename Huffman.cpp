@@ -44,20 +44,20 @@ std::map<char, double>* Huffman::getFrequencies(std::string s) {
 
 // ---------- SORT THE LIST OF NODES ----------------------------------------------------
 void Huffman::Sort(std::vector<Node*>& v) {
-	bool swap = true;
-	int  n 	  = v.size(), i;
+    bool swap = true;
+    int  n    = v.size(), i;
 	
 	// Simple bubble sort
-	while (swap) {	
-	    swap = false;
-	    for (i = 1; i <= n - 1; i++) {
+    while (swap) {	
+        swap = false;
+        for (i = 1; i <= n - 1; i++) {
             if (v[i-1]->getFrequency() > v[i]->getFrequency()) {
                 std::swap(v[i-1], v[i]);
-	    		swap = true;
-	    	}
-	    }
-	    n -= 1;
-	}
+                swap = true;
+            }
+        }
+        n -= 1;
+    }
 }
 
 // ---------- BUILD THE HUFFMAN TREE ----------------------------------------------------
