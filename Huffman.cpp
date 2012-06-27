@@ -9,24 +9,43 @@
 
 // ---------- CONSTRUCTOR ---------------------------------------------------------------
 Huffman::Huffman() {
-    encoded     = new std::map<char, std::vector<bool>>;
+    encodingMap = new std::map<char, std::vector<bool>>;
     frequencies = NULL;
 }
 
 // ---------- DECONSTRUCTOR -------------------------------------------------------------
 Huffman::~Huffman() {
-    delete encoded;
+    delete encodingMap;
     delete frequencies;
 }
 
 // ---------- ENCODE STRING -------------------------------------------------------------
 void Huffman::encode(std::string s) {
-
+    delete frequencies;
+    frequencies = getFrequencies(s);
+    buildTree();
+    encodedResult = buildEncodedResult(s);
 }
 
 // ---------- DECODE STRING -------------------------------------------------------------
 void Huffman::decode(std::string s) {
+    // NOT STARTED
+}
 
+// ---------- MAKE ENCODED STRING FROM ENCODING MAP -------------------------------------
+std::vector<bool> Huffman::buildEncodedResult(std::string s) {
+    std::map<char, std::vector<bool>>::iterator m_it;
+    std::string::iterator                       s_it;
+    std::vector<bool>                           result;
+
+    // Loop through the string the user wants to encode
+    for (s_it = s.begin(); s_it != s.end(); s_it++) {
+
+        // Append the current char's boolvector to the result
+        m_it = encodingMap->find(*s_it);
+        result.insert(result.end(), m_it->second.begin(), m_it->second.end());
+    }
+    return result;
 }
 
 // ---------- GET FREQUENCY OF EACH CHAR ------------------------------------------------
@@ -104,7 +123,7 @@ void Huffman::buildTree() {
 
     // Set tree pointer, and fill the tree...
     tree = nodes.front();
-    tree->fill(*encoded, bits);
+    tree->fill(*encodingMap, bits);
 }
 
 // ---------- SHOW THE HUFFMAN TREE -----------------------------------------------------
@@ -113,7 +132,7 @@ void Huffman::showTree() {
     std::vector<bool>::iterator                     b_it;
 
     // Loop through all the characters
-    for (e_it = encoded->begin(); e_it != encoded->end(); e_it++) {
+    for (e_it = encodingMap->begin(); e_it != encodingMap->end(); e_it++) {
         std::cout << e_it->first << ": ";
 
         // Loop through all the boolean variables
