@@ -21,6 +21,10 @@ Huffman::~Huffman() {
 
 // ---------- ENCODE STRING -------------------------------------------------------------
 void Huffman::encode(std::string s) {
+
+    /*
+        -> REVIEW AND CLEAN
+    */
     delete frequencies;
     frequencies = getFrequencies(s);
     buildTree();
@@ -30,6 +34,9 @@ void Huffman::encode(std::string s) {
     std::cout << "\n\n" << s << " = ";
     showBoolVector(encodedResult);
 
+    /*
+        MAKE THIS PART AS A FUNCTION
+    */
     int nSize = s.length() * 8;
     int eSize = encodedResult.size();
     float comp = 1 - ((float)eSize / (float)nSize);
