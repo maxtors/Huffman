@@ -16,10 +16,11 @@ private:
     std::map<char, std::vector<bool>>*  encodingMap;
     std::map<char, double>*             frequencies;
     std::map<char, double>*             getFrequencies(std::string s);
+    std::vector<bool>                   buildEncodedResult(std::string s);
     void Sort(std::vector<Node*>& v);
     void buildTree();
     void showTree();
-    std::vector<bool> buildEncodedResult(std::string s);
+    void showBoolVector(std::vector<bool>& v);
 public:
     Huffman();
     ~Huffman();

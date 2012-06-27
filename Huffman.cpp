@@ -24,7 +24,19 @@ void Huffman::encode(std::string s) {
     delete frequencies;
     frequencies = getFrequencies(s);
     buildTree();
+    showTree();
+
     encodedResult = buildEncodedResult(s);
+    std::cout << "\n\n" << s << " = ";
+    showBoolVector(encodedResult);
+
+    int nSize = s.length() * 8;
+    int eSize = encodedResult.size();
+    float comp = 1 - ((float)eSize / (float)nSize);
+
+    std::cout << "\n\nAmount of bytes in regular string: " << nSize;
+    std::cout << "\nAmount of bytes in encoded string: " << eSize;
+    std::cout << "\nCompression: " << comp * 100 << "%";
 }
 
 // ---------- DECODE STRING -------------------------------------------------------------
@@ -134,11 +146,13 @@ void Huffman::showTree() {
     // Loop through all the characters
     for (e_it = encodingMap->begin(); e_it != encodingMap->end(); e_it++) {
         std::cout << e_it->first << ": ";
-
-        // Loop through all the boolean variables
-        for (b_it = e_it->second.begin(); b_it != e_it->second.end(); b_it++) {
-            std::cout << *b_it;
-        }
+        showBoolVector(e_it->second);
         std::cout << "\n";
     }
+}
+
+// ---------- PRINT OUT A BOOLEAN VECTOR ------------------------------------------------
+void Huffman::showBoolVector(std::vector<bool>& v) {
+    std::vector<bool>::iterator v_it;
+    for (v_it = v.begin(); v_it != v.end(); v_it++) std::cout << *v_it;
 }

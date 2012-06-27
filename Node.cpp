@@ -35,4 +35,5 @@ void BindNode::fill(std::map<char, std::vector<bool>>& enc, std::vector<bool>& b
     left->fill(enc, bits);
     bits.back() = 1;
     right->fill(enc, bits);
+    bits.pop_back();
 }
