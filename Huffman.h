@@ -19,6 +19,7 @@ private:
     Frequencies* frequencies;
 
     Frequencies* getFrequencies(std::string s);
+    void         Sort(std::vector<Node*>& v)
 
 public:
     Huffman(std::string s);
