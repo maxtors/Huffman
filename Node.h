@@ -18,7 +18,6 @@ protected:
 public:
     Node()			{}
     virtual ~Node()	{}
-
     virtual void fill(Encode_map& enc, std::vector<bool>& bits) = 0;
     double getFrequency();
 };
@@ -30,7 +29,6 @@ private:
 public:
     LeafNode(double f, char d);
     ~LeafNode()		{}
-	
     void fill(Encode_map& enc, std::vector<bool>& bits);
 };
 
@@ -40,7 +38,6 @@ private:
 public:
     BindNode(Node* l, Node* r);
     ~BindNode();
-
     void fill(Encode_map& enc, std::vector<bool>& bits);
 };
 

@@ -19,9 +19,9 @@ void LeafNode::fill(Encode_map& enc, std::vector<bool>& bits) {
 
 // ---------- BINDNODE CONSTRUCTOR --------------------------------------------
 BindNode::BindNode(Node* l, Node* r) {
-    frequency   = (left->getFrequency() + right->getFrequency());
     left        = l;
     right       = r;
+    frequency   = (left->getFrequency() + right->getFrequency());
 }
 
 // ---------- BINDNODE DECONSTRUCTOR ------------------------------------------

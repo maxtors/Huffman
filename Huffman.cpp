@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <iostream>
 #include "Huffman.h"
 #include "Node.h"
 
@@ -56,8 +57,8 @@ void Huffman::Sort(std::vector<Node*>& v) {
 	// Simple bubble sort
 	while (swap) {	
 	    swap = false;
-	    for (int i = 1; i < n - 1; i++) {
-	    	if (v[i-1] > v[i]) {
+	    for (int i = 1; i <= n - 1; i++) {
+            if (v[i-1]->getFrequency() > v[i]->getFrequency()) {
 	    		temp = v[i];
 	    		v[i] = v[i-1];
 	    		v[i-1] = temp;
@@ -70,10 +71,11 @@ void Huffman::Sort(std::vector<Node*>& v) {
 
 // ---------- BUILD THE HUFFMAN TREE ------------------------------------------
 void Huffman::buildTree() {
-    std::vector<Node*> nodes;
-    Node* newnode, n1, n2;
-    Frequencies temp = *frequencies;
-    Frequencies::iterator f_it, lowest;
+    std::vector<Node*>      nodes;
+    std::vector<bool>       bits;
+    Node*                   newnode, *n1, *n2;
+    Frequencies             temp = *frequencies;
+    Frequencies::iterator   f_it, lowest;
 
     // Loop til map is empty
     while (!temp.empty()) {   
@@ -111,8 +113,22 @@ void Huffman::buildTree() {
     	
     	Sort(nodes);
     }
-    
-    // VED NÅ ER DET BARE EN NODE IGJEN.
-    // OG ALT ER ORGANISERT I ET TREE
-    // DERETTER MÅ DET FYLLES UT BINÆR VERDIER
+
+    // Set tree pointer, and fill the tree...
+    tree = nodes.at(0);
+    tree->fill(*encoded, bits);
+}
+
+// ---------- SHOW THE HUFFMAN TREE -------------------------------------------
+void Huffman::showTree() {
+    Encode_map::iterator e_it;
+    std::vector<bool>::iterator b_it;
+
+    for (e_it = encoded->begin(); e_it != encoded->end(); e_it++) {
+        std::cout << e_it->first << ": ";
+        for (b_it = e_it->second.begin(); b_it != e_it->second.end(); b_it++) {
+            std::cout << *b_it;
+        }
+        std::cout << "\n";
+    }
 }

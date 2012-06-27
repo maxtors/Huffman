@@ -4,7 +4,9 @@
 
 // ---------- MAIN ------------------------------------------------------------
 int main() {
-    Huffman h("Hei hei, dette er min file lille streng");
+    Huffman h("ERDBEERE");
     h.buildTree();
+    h.showTree();
+    system("pause");
     return 0;
 }
