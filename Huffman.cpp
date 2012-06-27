@@ -70,8 +70,8 @@ void Huffman::Sort(std::vector<Node*>& v) {
 
 // ---------- BUILD THE HUFFMAN TREE ------------------------------------------
 void Huffman::buildTree() {
-    std::vector<Node*> leafnodes;
-    Node* newnode;
+    std::vector<Node*> nodes;
+    Node* newnode, n1, n2;
     Frequencies temp = *frequencies;
     Frequencies::iterator f_it, lowest;
 
@@ -92,14 +92,27 @@ void Huffman::buildTree() {
         
         // Create new leafnode and add to vector
         newnode = new LeafNode(lowest->second, lowest->first);
-        leafnodes.push_back(newnode);
+        nodes.push_back(newnode);
         temp.erase(lowest);
     }
-
-    /*
-        VED DETTE PUNKTET S� HAR JEG EN VECTOR
-        AV NODE* SOM INNEHOLDER HVERT LEAFNODE
-        SORTERT FRA DE MED MINST FREQ F�RST TIL
-        DE MED ST�RST FREQ SIST...
-    */
+	
+	// Create the Huffman tree
+    while (nodes.size() != 1) {
+    	n1 = nodes.at(0);
+    	n2 = nodes.at(1);
+    	
+    	// Create new binding node
+    	newnode = new BindNode(n1, n2);
+    	nodes.push_back(newnode);
+    	
+    	// Remove the two first elements
+    	nodes.erase(nodes.begin());
+    	nodes.erase(nodes.begin());
+    	
+    	Sort(nodes);
+    }
+    
+    // VED NÅ ER DET BARE EN NODE IGJEN.
+    // OG ALT ER ORGANISERT I ET TREE
+    // DERETTER MÅ DET FYLLES UT BINÆR VERDIER
 }
