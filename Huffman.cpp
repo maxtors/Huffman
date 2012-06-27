@@ -9,7 +9,7 @@
 
 // ---------- CONSTRUCTOR ---------------------------------------------------------------
 Huffman::Huffman(std::string s) {
-    encoded	    = new std::map<char, std::vector<bool>>;
+    encoded     = new std::map<char, std::vector<bool>>;
     frequencies = getFrequencies(s);
 }
 
