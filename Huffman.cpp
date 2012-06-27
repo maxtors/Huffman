@@ -7,19 +7,19 @@
 #include "Node.h"
 
 
-// ---------- CONSTRUCTOR -----------------------------------------------------
+// ---------- CONSTRUCTOR ---------------------------------------------------------------
 Huffman::Huffman(std::string s) {
     encoded	    = new std::map<char, std::vector<bool>>;
     frequencies = getFrequencies(s);
 }
 
-// ---------- DECONSTRUCTOR ---------------------------------------------------
+// ---------- DECONSTRUCTOR -------------------------------------------------------------
 Huffman::~Huffman() {
     delete encoded;
     delete frequencies;
 }
 
-// ---------- GET FREQUENCY OF EACH CHAR --------------------------------------
+// ---------- GET FREQUENCY OF EACH CHAR ------------------------------------------------
 std::map<char, double>* Huffman::getFrequencies(std::string s) {
     std::map<char, double>*             f = new std::map<char, double>;
     std::map<char, double>::iterator    f_it;
@@ -42,7 +42,7 @@ std::map<char, double>* Huffman::getFrequencies(std::string s) {
     return f;
 }
 
-// ---------- SORT THE LIST OF NODES ------------------------------------------
+// ---------- SORT THE LIST OF NODES ----------------------------------------------------
 void Huffman::Sort(std::vector<Node*>& v) {
 	bool swap = true;
 	int  n 	  = v.size(), i;
@@ -60,7 +60,7 @@ void Huffman::Sort(std::vector<Node*>& v) {
 	}
 }
 
-// ---------- BUILD THE HUFFMAN TREE ------------------------------------------
+// ---------- BUILD THE HUFFMAN TREE ----------------------------------------------------
 void Huffman::buildTree() {
     std::vector<Node*>                  nodes;
     std::vector<bool>                   bits;
@@ -97,7 +97,7 @@ void Huffman::buildTree() {
     tree->fill(*encoded, bits);
 }
 
-// ---------- SHOW THE HUFFMAN TREE -------------------------------------------
+// ---------- SHOW THE HUFFMAN TREE -----------------------------------------------------
 void Huffman::showTree() {
     std::map<char, std::vector<bool>>::iterator     e_it;
     std::vector<bool>::iterator                     b_it;
