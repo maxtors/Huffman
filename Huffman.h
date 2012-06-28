@@ -25,6 +25,7 @@ private:
         int  data
     */
     
+    // ---------- STRUCTS ---------------------------------------------------------------
     struct DataFile {
         char  magicNumber;
         char  paddingOffset;
@@ -43,32 +44,33 @@ private:
         std::vector<TableEntry> data;
     };
 
+    // ---------- VARIABLES -------------------------------------------------------------
     Node*                               tree;
     std::string                         decodedResult;
     std::vector<bool>                   encodedResult;
     std::map<char, std::vector<bool>>*  encodingMap;
     std::map<char, double>*             frequencies;
-    std::map<char, double>*             getFrequencies(std::string s);
-    std::vector<bool>                   buildEncodedResult(std::string s);
-                                                   
+
+    // ---------- PRIVATE FUNCTIONS -----------------------------------------------------
+    std::map<char, double>* getFrequencies(std::string s);
+    std::vector<bool>       buildEncodedResult(std::string s);                                               
     //DataFile*   createDataFile(std::vector<bool>& v);
     //TableFile*  createTableFile(std::map<char, std::vector<bool>>& m);
     //DataFile*   readDataFile(ifstream* file);
     //TableFile*  readTableFile(ifstream* file);
     //void        writeDataFile(ofstream* file);
     //void        writeDataFile(ofstream* file);
-    //void        Sort(std::vector<Node*>& v);
+    void        Sort(std::vector<Node*>& v);
     void        buildTree();
     void        showTree();
     void        showBoolVector(std::vector<bool>& v);
     
 public:
+    // ---------- PUBLIC FUNCTIONS ------------------------------------------------------
     Huffman();
     ~Huffman();
-    
     //void encode(ifstream* file);
     //void decode(ifstream* table, ifstream* data)
-    
     void encode(std::string s);
     void decode(std::string s);
 };
