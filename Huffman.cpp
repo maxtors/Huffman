@@ -11,12 +11,16 @@
 Huffman::Huffman() {
     encodingMap = new std::map<char, std::vector<bool>>;
     frequencies = NULL;
+    datafile 	= NULL;
+    tablefile 	= NULL;
 }
 
 // ---------- DECONSTRUCTOR -------------------------------------------------------------
 Huffman::~Huffman() {
     delete encodingMap;
     delete frequencies;
+    delete datafile;
+    delete tablefile;
 }
 
 // ---------- ENCODE STRING -------------------------------------------------------------
@@ -25,7 +29,7 @@ void Huffman::encode(std::string s) {
     /*
         -> REVIEW AND CLEAN
     */
-    delete frequencies;
+    if (frequencies) delete frequencies;
     frequencies = getFrequencies(s);
     buildTree();
     showTree();
