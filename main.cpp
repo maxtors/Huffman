@@ -12,14 +12,25 @@ int main(int argc, char* argv[]) {
         if (argc != 3 && argc != 4) throw "Invalid number of arguments";
         if (strcmp(argv[1],"-e")!=0 &&
             strcmp(argv[1],"-d")!=0) throw "Incorrect arguemnt";
-        file.open(argv[2]);
-        if (!file) throw "Could not open file";
-        file.close();
         if (strcmp(argv[1],"-e")==0 && argc != 3) throw "Invalid number of arguments";
         if (strcmp(argv[1],"-d")==0 && argc != 4) throw "Invalid number of arguments";
 
         if (strcmp(argv[1],"-e")==0) {
+            file.open(argv[2]);
+            if (!file) throw "Could not open file";
+            file.close();
+
             h.encode(argv[2]);
+        }
+        else if (strcmp(argv[1],"-d")==0) {
+            file.open(argv[2]);
+            if (!file) throw "Could not open datafile";
+            file.close();
+            file.open(argv[2]);
+            if (!file) throw "Could not open tablefile";
+            file.close();
+
+            h.decode(argv[2], argv[3]);
         }
     }
     catch (char* err) {
