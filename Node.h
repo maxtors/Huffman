@@ -13,15 +13,15 @@ enum NODE_TYPE {LEAF, BIND};
 class Node {
 private:
     NODE_TYPE type;
-    short frequency;
+    int frequency;
     char* data;
     Node* left;
     Node* right;
 public:
-    Node(char d, short s, NODE_TYPE t = LEAF);
+    Node(char d, int s, NODE_TYPE t = LEAF);
     Node(Node* l, Node* r, NODE_TYPE t = BIND);
     ~Node();
-    short  getFrequency();
+    int  getFrequency();
     void    fill(std::map<char, std::pair<int, int>>& enc, int bits, int nbits);
 };
 

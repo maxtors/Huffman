@@ -5,7 +5,7 @@
 // ---------- MAIN ----------------------------------------------------------------------
 int main() {
     Huffman h;
-    h.encode("TEST.txt");
+    h.encode("test.rar");
 
     std::cout << "\n\n"; system("pause");
     return 0;

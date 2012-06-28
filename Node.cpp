@@ -2,7 +2,7 @@
 #include "Node.h"
 
 // ---------- NODE (LEAF) CONSTRUCTOR ---------------------------------------------------
-Node::Node(char d, short s, NODE_TYPE t) {
+Node::Node(char d, int s, NODE_TYPE t) {
     type = t;
     data = new char[2]; data[0] = d; data[1] = '\0';
     frequency = s;
@@ -26,7 +26,7 @@ Node::~Node() {
 }
 
 // ---------- GET NODE FREQUENCY --------------------------------------------------------
-short Node::getFrequency() {
+int Node::getFrequency() {
     return frequency;
 }
 

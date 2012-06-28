@@ -51,10 +51,10 @@ private:
     std::string             decodedResult;
     std::vector<std::pair<int, int>>        encodedResult;
     std::map<char, std::pair<int, int>>*    encodingMap;
-    std::map<char, short>* frequencies;
+    std::map<char, int>* frequencies;
 
     // ---------- PRIVATE FUNCTIONS -----------------------------------------------------
-    std::map<char, short>* getFrequencies(char* data, int size);
+    std::map<char, int>* getFrequencies(char* data, int size);
     std::vector<std::pair<int, int>>        buildEncodedResult(char* data, int size);
     //DataFile*   createDataFile(std::vector<bool>& v);
     //TableFile*  createTableFile(std::map<char, std::vector<bool>>& m);

@@ -52,16 +52,16 @@ void Huffman::encode(std::string filename) {
 
         encodedResult = buildEncodedResult(charData, size);
 
-        /*
-            MAKE THIS PART AS A FUNCTION
-        int nSize = size * 8;
-        int eSize = encodedResult.size();
-        float comp = 1 - ((float)eSize / (float)nSize);
+        int s = 0;
+        std::vector<std::pair<int, int>>::iterator it;
+        for (it = encodedResult.begin(); it != encodedResult.end(); it++) {
+            s += it->second;
+        }
 
-        std::cout << "\n\nAmount of bits in regular string: " << nSize;
-        std::cout << "\nAmount of bits in encoded string: " << eSize;
+        float comp = 1 - ((float)s / (float)(size*8));
+        std::cout << "\n\nAmount of bits in regular string: " << size * 8;
+        std::cout << "\nAmount of bits in encoded string: " << s;
         std::cout << "\nCompression: " << comp * 100 << "%";
-        */
     }
 }
 
@@ -86,15 +86,15 @@ std::vector<std::pair<int, int>> Huffman::buildEncodedResult(char* data, int siz
 }
 
 // ---------- GET FREQUENCY OF EACH CHAR ------------------------------------------------
-std::map<char, short>* Huffman::getFrequencies(char* data, int size) {
-    std::map<char, short>*             f = new std::map<char, short>;
-    std::map<char, short>::iterator    f_it;
+std::map<char, int>* Huffman::getFrequencies(char* data, int size) {
+    std::map<char, int>*             f = new std::map<char, int>;
+    std::map<char, int>::iterator    f_it;
 	
     // Loop through the parameter string, and treat each character
     for (int i = 0; i < size; i++) {
         // If the char is in the map, add one, if not, insert into map
         f_it = f->find(data[i]);
-        if (f_it == f->end()) f->insert(std::pair<char, short>(data[i], 1));
+        if (f_it == f->end()) f->insert(std::pair<char, int>(data[i], 1));
         else                  (*f)[data[i]] += 1;
     }
 
@@ -124,8 +124,8 @@ void Huffman::Sort(std::vector<Node*>& v) {
 void Huffman::buildTree() {
     int                                 bits = 0;
     std::vector<Node*>                  nodes;
-    std::map<char, short>              temp = *frequencies;
-    std::map<char, short>::iterator    f_it, lowest;
+    std::map<char, int>              temp = *frequencies;
+    std::map<char, int>::iterator    f_it, lowest;
 
     // Loop til map is empty
     while (!temp.empty()) {
@@ -163,6 +163,6 @@ void Huffman::showTree() {
 
     // Loop through all the characters
     for (e_it = encodingMap->begin(); e_it != encodingMap->end(); e_it++) {
-        std::cout << e_it->first << ": " << e_it->second.first << "\n";
+        std::cout << e_it->first << ": (" << e_it->second.second << ")  " << e_it->second.first << "\n";
     }
 }
