@@ -1,39 +1,47 @@
 #include <iostream>
 #include "Node.h"
 
-// ---------- GET NODE FREQUENCY --------------------------------------------------------
-double Node::getFrequency()     { return frequency; }
-
-// ---------- LEFNODE CONSTRUCTOR -------------------------------------------------------
-LeafNode::LeafNode(double f, char d) {
+// ---------- NODE (LEAF) CONSTRUCTOR ---------------------------------------------------
+Node::Node(char d, short s, NODE_TYPE t) {
+    type = t;
+    data = new char[2]; data[0] = d; data[1] = '\0';
+    frequency = s;
     left = right = NULL;
-    frequency    = f;
-    data         = d;
 }
 
-// ---------- LEAFNODE FILL -------------------------------------------------------------
-void LeafNode::fill(std::map<char, std::vector<bool>>& enc, std::vector<bool>& bits) {
-    enc[data] = bits;
+// ---------- NODE (BIND) CONSTRUCTOR ---------------------------------------------------
+Node::Node(Node* l, Node* r, NODE_TYPE t) {
+    type = t;
+    data = NULL;
+    frequency = l->getFrequency() + r->getFrequency();
+    left = l;
+    right = r;
 }
 
-// ---------- BINDNODE CONSTRUCTOR ------------------------------------------------------
-BindNode::BindNode(Node* l, Node* r) {
-    left        = l;
-    right       = r;
-    frequency   = (left->getFrequency() + right->getFrequency());
-}
-
-// ---------- BINDNODE DECONSTRUCTOR ----------------------------------------------------
-BindNode::~BindNode() {
+// ---------- NODE DECONSTRUCTOR --------------------------------------------------------
+Node::~Node() {
+    delete data;
     delete left;
     delete right;
 }
 
-// ---------- BINDNODE FILL -------------------------------------------------------------
-void BindNode::fill(std::map<char, std::vector<bool>>& enc, std::vector<bool>& bits) {
-    bits.push_back(0);
-    left->fill(enc, bits);
-    bits.back() = 1;
-    right->fill(enc, bits);
-    bits.pop_back();
+// ---------- GET NODE FREQUENCY --------------------------------------------------------
+short Node::getFrequency() {
+    return frequency;
+}
+
+// ---------- FILL NODE WITH DATA -------------------------------------------------------
+void Node::fill(std::map<char, std::pair<int, int>>& enc, int bits, int nbits) {
+    if (type == LEAF) {
+        enc[data[0]] = std::pair<int, int>(bits, nbits);
+    }
+    else if (type == BIND) {
+        nbits += 1;
+        bits <<= 1;
+        left->fill(enc, bits, nbits);
+        bits += 1;
+        right->fill(enc, bits, nbits);
+        bits >>= 1;
+        nbits--;
+    }
 }

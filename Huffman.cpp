@@ -3,13 +3,14 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
+#include <fstream>
 #include "Huffman.h"
 #include "Node.h"
 
 
 // ---------- CONSTRUCTOR ---------------------------------------------------------------
 Huffman::Huffman() {
-    encodingMap = new std::map<char, std::vector<bool>>;
+    encodingMap = new std::map<char, std::pair<int, int>>;
     frequencies = NULL;
     datafile 	= NULL;
     tablefile 	= NULL;
@@ -24,70 +25,77 @@ Huffman::~Huffman() {
 }
 
 // ---------- ENCODE STRING -------------------------------------------------------------
-void Huffman::encode(std::string s) {
-
-    /*
-        -> REVIEW AND CLEAN
-    */
+void Huffman::encode(std::string filename) {
+    char* charData;
+    std::string stringData;
+    int size, start, stop;
     if (frequencies) delete frequencies;
-    frequencies = getFrequencies(s);
-    buildTree();
-    showTree();
+    std::ifstream file(filename.c_str(), std::ios::binary);
 
-    encodedResult = buildEncodedResult(s);
-    std::cout << "\n\n" << s << " = ";
-    showBoolVector(encodedResult);
+    if (!file) {
+        std::cout << "Could not open file: " << filename << "\n";
+        return;
+    }
+    else {
+        file.seekg(0, std::ios::beg);
+        start = file.tellg();
+        file.seekg(0, std::ios::end);
+        stop = file.tellg();
+        file.seekg(0, std::ios::beg);
+        size = stop - start;
+        charData = new char[size];
+        file.read(charData, size);
 
-    /*
-        MAKE THIS PART AS A FUNCTION
-    */
-    int nSize = s.length() * 8;
-    int eSize = encodedResult.size();
-    float comp = 1 - ((float)eSize / (float)nSize);
+        frequencies = getFrequencies(charData, size);
+        buildTree();
+        showTree();
 
-    std::cout << "\n\nAmount of bytes in regular string: " << nSize;
-    std::cout << "\nAmount of bytes in encoded string: " << eSize;
-    std::cout << "\nCompression: " << comp * 100 << "%";
+        encodedResult = buildEncodedResult(charData, size);
+
+        /*
+            MAKE THIS PART AS A FUNCTION
+        int nSize = size * 8;
+        int eSize = encodedResult.size();
+        float comp = 1 - ((float)eSize / (float)nSize);
+
+        std::cout << "\n\nAmount of bits in regular string: " << nSize;
+        std::cout << "\nAmount of bits in encoded string: " << eSize;
+        std::cout << "\nCompression: " << comp * 100 << "%";
+        */
+    }
 }
 
 // ---------- DECODE STRING -------------------------------------------------------------
-void Huffman::decode(std::string s) {
+void Huffman::decode(std::string data_filename, std::string table_filename) {
     // NOT STARTED
 }
 
 // ---------- MAKE ENCODED STRING FROM ENCODING MAP -------------------------------------
-std::vector<bool> Huffman::buildEncodedResult(std::string s) {
-    std::map<char, std::vector<bool>>::iterator m_it;
-    std::string::iterator                       s_it;
-    std::vector<bool>                           result;
+std::vector<std::pair<int, int>> Huffman::buildEncodedResult(char* data, int size) {
+    std::map<char, std::pair<int, int>>::iterator m_it;
+    std::vector<std::pair<int, int>>              result;
 
     // Loop through the string the user wants to encode
-    for (s_it = s.begin(); s_it != s.end(); s_it++) {
+    for (int i = 0; i < size; i++) {
 
         // Append the current char's boolvector to the result
-        m_it = encodingMap->find(*s_it);
-        result.insert(result.end(), m_it->second.begin(), m_it->second.end());
+        m_it = encodingMap->find(data[i]);
+        result.push_back(m_it->second);
     }
     return result;
 }
 
 // ---------- GET FREQUENCY OF EACH CHAR ------------------------------------------------
-std::map<char, double>* Huffman::getFrequencies(std::string s) {
-    std::map<char, double>*             f = new std::map<char, double>;
-    std::map<char, double>::iterator    f_it;
+std::map<char, short>* Huffman::getFrequencies(char* data, int size) {
+    std::map<char, short>*             f = new std::map<char, short>;
+    std::map<char, short>::iterator    f_it;
 	
     // Loop through the parameter string, and treat each character
-    for (unsigned int i = 0; i < s.length(); i++) {
+    for (int i = 0; i < size; i++) {
         // If the char is in the map, add one, if not, insert into map
-        f_it = f->find(s[i]);
-        if (f_it == f->end()) f->insert(std::pair<char, double>(s[i], 1.0f));
-        else                  (*f)[s[i]] += 1.0f;
-    }
-
-    // Get percentage frequency of each character
-    f_it = f->begin();
-    while (f_it != f->end()) {
-        (*f)[f_it->first] /= s.size();  f_it++;
+        f_it = f->find(data[i]);
+        if (f_it == f->end()) f->insert(std::pair<char, short>(data[i], 1));
+        else                  (*f)[data[i]] += 1;
     }
 
     // Return the mapping of character frequencies
@@ -114,10 +122,10 @@ void Huffman::Sort(std::vector<Node*>& v) {
 
 // ---------- BUILD THE HUFFMAN TREE ----------------------------------------------------
 void Huffman::buildTree() {
+    int                                 bits = 0;
     std::vector<Node*>                  nodes;
-    std::vector<bool>                   bits;
-    std::map<char, double>              temp = *frequencies;
-    std::map<char, double>::iterator    f_it, lowest;
+    std::map<char, short>              temp = *frequencies;
+    std::map<char, short>::iterator    f_it, lowest;
 
     // Loop til map is empty
     while (!temp.empty()) {
@@ -131,7 +139,7 @@ void Huffman::buildTree() {
         }
         
         // Create new leafnode and add to vector
-        nodes.push_back(new LeafNode(lowest->second, lowest->first));
+        nodes.push_back(new Node(lowest->first, lowest->second));
         temp.erase(lowest);
     }
 	
@@ -139,31 +147,22 @@ void Huffman::buildTree() {
     while (nodes.size() != 1) {
     	
     	// Create new binding node, erase used nodes, and sort vector
-    	nodes.push_back(new BindNode(nodes.at(0), nodes.at(1)));
+    	nodes.push_back(new Node(nodes.at(0), nodes.at(1)));
         nodes.erase(nodes.begin(), nodes.begin()+2);
     	Sort(nodes);
     }
 
     // Set tree pointer, and fill the tree...
     tree = nodes.front();
-    tree->fill(*encodingMap, bits);
+    tree->fill(*encodingMap, bits, 0);
 }
 
 // ---------- SHOW THE HUFFMAN TREE -----------------------------------------------------
 void Huffman::showTree() {
-    std::map<char, std::vector<bool>>::iterator     e_it;
-    std::vector<bool>::iterator                     b_it;
+    std::map<char, std::pair<int, int>>::iterator e_it;
 
     // Loop through all the characters
     for (e_it = encodingMap->begin(); e_it != encodingMap->end(); e_it++) {
-        std::cout << e_it->first << ": ";
-        showBoolVector(e_it->second);
-        std::cout << "\n";
+        std::cout << e_it->first << ": " << e_it->second.first << "\n";
     }
-}
-
-// ---------- PRINT OUT A BOOLEAN VECTOR ------------------------------------------------
-void Huffman::showBoolVector(std::vector<bool>& v) {
-    std::vector<bool>::iterator v_it;
-    for (v_it = v.begin(); v_it != v.end(); v_it++) std::cout << *v_it;
 }

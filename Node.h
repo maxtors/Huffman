@@ -7,35 +7,22 @@
 #include <string>
 
 // ---------- NODE CLASS ----------------------------------------------------------------
+
+enum NODE_TYPE {LEAF, BIND};
+
 class Node {
-protected:
-    double	    frequency;
-    Node*	    left;
-    Node*	    right;
-public:
-    Node()			        {}
-    virtual      ~Node()	{}
-    double       getFrequency();
-    virtual void fill(std::map<char, std::vector<bool>>& enc, std::vector<bool>& bits)=0;
-};
-
-// ---------- LEAFNODE CLASS ------------------------------------------------------------
-class LeafNode : public Node {
 private:
-    char data;
+    NODE_TYPE type;
+    short frequency;
+    char* data;
+    Node* left;
+    Node* right;
 public:
-    LeafNode(double f, char d);
-    ~LeafNode() {}
-    void fill(std::map<char, std::vector<bool>>& enc, std::vector<bool>& bits);
-};
-
-// ---------- BINDNODE CLASS ------------------------------------------------------------
-class BindNode : public Node {
-private:
-public:
-    BindNode(Node* l, Node* r);
-    ~BindNode();
-    void fill(std::map<char, std::vector<bool>>& enc, std::vector<bool>& bits);
+    Node(char d, short s, NODE_TYPE t = LEAF);
+    Node(Node* l, Node* r, NODE_TYPE t = BIND);
+    ~Node();
+    short  getFrequency();
+    void    fill(std::map<char, std::pair<int, int>>& enc, int bits, int nbits);
 };
 
 #endif

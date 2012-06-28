@@ -5,7 +5,7 @@
 // ---------- MAIN ----------------------------------------------------------------------
 int main() {
     Huffman h;
-    h.encode("Test string to see how this works...");
+    h.encode("TEST.txt");
 
     std::cout << "\n\n"; system("pause");
     return 0;

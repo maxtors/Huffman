@@ -48,14 +48,14 @@ private:
     Node*               tree;
     DataFile*           datafile;
     TableFile*          tablefile;
-    std::string         decodedResult;
-    std::vector<bool>   encodedResult;
-    std::map<char, std::vector<bool>>*  encodingMap;
-    std::map<char, double>*             frequencies;
+    std::string             decodedResult;
+    std::vector<std::pair<int, int>>        encodedResult;
+    std::map<char, std::pair<int, int>>*    encodingMap;
+    std::map<char, short>* frequencies;
 
     // ---------- PRIVATE FUNCTIONS -----------------------------------------------------
-    std::map<char, double>* getFrequencies(std::string s);
-    std::vector<bool>       buildEncodedResult(std::string s);                                               
+    std::map<char, short>* getFrequencies(char* data, int size);
+    std::vector<std::pair<int, int>>        buildEncodedResult(char* data, int size);
     //DataFile*   createDataFile(std::vector<bool>& v);
     //TableFile*  createTableFile(std::map<char, std::vector<bool>>& m);
     //DataFile*   readDataFile(ifstream* file);
@@ -65,16 +65,14 @@ private:
     void        Sort(std::vector<Node*>& v);
     void        buildTree();
     void        showTree();
-    void        showBoolVector(std::vector<bool>& v);
+    void        showIntVector(std::vector<int>& v);
     
 public:
     // ---------- PUBLIC FUNCTIONS ------------------------------------------------------
     Huffman();
     ~Huffman();
-    //void encode(ifstream* file);
-    //void decode(ifstream* table, ifstream* data)
-    void encode(std::string s);
-    void decode(std::string s);
+    void encode(std::string filename);
+    void decode(std::string data_filename, std::string table_filename);
 };
 
 #endif

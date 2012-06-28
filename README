@@ -1,2 +1,8 @@
-This program is simply for me to learn how to work with binary
-trees in C++, in the form of Huffman coding.
+This program is simply for me to learn how to work with
+binary trees in C++, in the form of Huffman coding.
+
+The goal i decided to go for was: A console based application
+that will read a file, perform huffman coding, then save the
+result in one data file, and one huffman tabel file. So that
+the data can be stored, sent, or maybe used in some other
+context.
