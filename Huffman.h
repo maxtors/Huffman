@@ -45,9 +45,11 @@ private:
     };
 
     // ---------- VARIABLES -------------------------------------------------------------
-    Node*                               tree;
-    std::string                         decodedResult;
-    std::vector<bool>                   encodedResult;
+    Node*               tree;
+    DataFile*           datafile;
+    TableFile*          tablefile;
+    std::string         decodedResult;
+    std::vector<bool>   encodedResult;
     std::map<char, std::vector<bool>>*  encodingMap;
     std::map<char, double>*             frequencies;
 
