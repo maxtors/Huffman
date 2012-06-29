@@ -194,12 +194,12 @@ void Huffman::createTableFile(std::map<char, std::pair<int, int>>& m) {
 }
 
 // ---------- READ THE DATAFILE FROM DISK -----------------------------------------------
-DataFile* Huffman::readDataFile(std::ifstream* file) {
+void Huffman::readDataFile(std::string fstr) {
 	// ---
 }
 
 // ---------- READ TABLEFILE FROM DISK --------------------------------------------------
-TableFile* Huffman::readTableFile(std::ifstream* file) {
+void Huffman::readTableFile(std::string fstr) {
 	// ---
 }
 
