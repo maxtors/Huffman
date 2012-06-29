@@ -52,8 +52,16 @@ void Huffman::encode(std::string filename) {
         frequencies = getFrequencies(charData, size);
         buildTree();
         showTree();
+        
+        // Get the encoded result, create data and table files
         encodedResult = buildEncodedResult(charData, size);
-
+		createDatafile(encodedResult);
+		createTablefile(encodingMap);
+		
+		// Write data and table file to disk
+		writeDatafile(datafile);
+		writeTablefile(tablefile);
+		
 		/*
 			LAG DENNE DELEN OM TIL EN EGEN FUNKSJON
 		*/
@@ -174,13 +182,15 @@ void Huffman::showTree() {
 }
 
 // ---------- CREATE DATAFILE -----------------------------------------------------------
-DataFile* Huffman::createDataFile(std::vector<std::pair<int, int>>& v) {
-	// ---
+void Huffman::createDataFile(std::vector<std::pair<int, int>>& v) {
+	if (datafile) delete tablefile;
+	datafile = new Datafile;
 }
 
 // ---------- CREATE TABLE FILE ---------------------------------------------------------
-TableFile* Huffman::createTableFile(std::map<char, std::pair<int, int>>& m) {
-	// ---
+void Huffman::createTableFile(std::map<char, std::pair<int, int>>& m) {
+	if (tablefile) delete tablefile;
+	tablefile = new Tablefile;
 }
 
 // ---------- READ THE DATAFILE FROM DISK -----------------------------------------------
@@ -194,11 +204,11 @@ TableFile* Huffman::readTableFile(std::ifstream* file) {
 }
 
 // ---------- WRITE TABLEFILE TO DISK ---------------------------------------------------
-void Huffman::writeTableFile(std::ofstream* file) {
+void Huffman::writeTableFile(Tablefile* d) {
 	// ---
 }
 
 // ---------- WRITE DATAFILE TO DISK ----------------------------------------------------
-void Huffman::writeDataFile(std::ofstream* file) {
+void Huffman::writeDataFile(Datafile* d) {
 	// ---
 }
