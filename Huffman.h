@@ -45,13 +45,13 @@ private:
     };
 
     // ---------- VARIABLES -------------------------------------------------------------
-    Node*               tree;
-    DataFile*           datafile;
-    TableFile*          tablefile;
-    std::string             decodedResult;
+    Node*       tree;
+    DataFile*   datafile;
+    TableFile*  tablefile;
+    std::string decodedResult;
     std::vector<std::pair<int, int>>        encodedResult;
     std::map<char, std::pair<int, int>>*    encodingMap;
-    std::map<char, int>* frequencies;
+    std::map<char, int>*                    frequencies;
 
     // ---------- PRIVATE FUNCTIONS -----------------------------------------------------
     std::map<char, int>*                getFrequencies(char* data, int size);
