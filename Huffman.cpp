@@ -55,8 +55,8 @@ void Huffman::encode(std::string filename) {
         
         // Get the encoded result, create data and table files
         encodedResult = buildEncodedResult(charData, size);
-		createDatafile(encodedResult);
-		createTablefile(encodingMap);
+        createDatafile(encodedResult);
+        createTablefile(encodingMap);
 		
 		// Write data and table file to disk
 		writeDatafile(datafile);
