@@ -56,12 +56,20 @@ private:
     // ---------- PRIVATE FUNCTIONS -----------------------------------------------------
     std::map<char, int>*                getFrequencies(char* data, int size);
     std::vector<std::pair<int, int>>    buildEncodedResult(char* data, int size);
+    
+    // Create data structs from private data
     void createDataFile(std::vector<std::pair<int, int>>& v);
     void createTableFile(std::map<char, std::pair<int, int>>& m);
-    void readDataFile(ifstream* file);
-    void readTableFile(ifstream* file);
+    
+    // Read data structs from file
+    void readDataFile(std::string fstr);
+    void readTableFile(std::string fstr);
+    
+    // Write data structs to file
     void writeTableFile(Tablefile* t);
     void writeDataFile(Datafile* d);
+    
+    // DIV
     void Sort(std::vector<Node*>& v);
     void buildTree();
     void showTree();
