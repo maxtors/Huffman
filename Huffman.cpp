@@ -27,16 +27,18 @@ Huffman::~Huffman() {
 // ---------- ENCODE STRING -------------------------------------------------------------
 void Huffman::encode(std::string filename) {
     char* charData;
-    std::string stringData;
-    int size, start, stop;
-    if (frequencies) delete frequencies;
+    int   size, start, stop;
+    std::string   stringData;
     std::ifstream file(filename.c_str(), std::ios::binary);
+    
+    if (frequencies) delete frequencies;
 
     if (!file) {
         std::cout << "Could not open file: " << filename << "\n";
         return;
     }
     else {
+    	// Get the file size
         file.seekg(0, std::ios::beg);
         start = file.tellg();
         file.seekg(0, std::ios::end);
@@ -46,12 +48,15 @@ void Huffman::encode(std::string filename) {
         charData = new char[size];
         file.read(charData, size);
 
+		// Get frequencies of chars, and build the huffman tree
         frequencies = getFrequencies(charData, size);
         buildTree();
         showTree();
-
         encodedResult = buildEncodedResult(charData, size);
 
+		/*
+			LAG DENNE DELEN OM TIL EN EGEN FUNKSJON
+		*/
         int s = 0;
         std::vector<std::pair<int, int>>::iterator it;
         for (it = encodedResult.begin(); it != encodedResult.end(); it++) {
@@ -163,6 +168,37 @@ void Huffman::showTree() {
 
     // Loop through all the characters
     for (e_it = encodingMap->begin(); e_it != encodingMap->end(); e_it++) {
-        std::cout << e_it->first << ": (" << e_it->second.second << ")  " << e_it->second.first << "\n";
+        std::cout << e_it->first << ": (" << e_it->second.second << ")  "
+        		  << e_it->second.first << "\n";
     }
+}
+
+// ---------- CREATE DATAFILE -----------------------------------------------------------
+DataFile* Huffman::createDataFile(std::vector<std::pair<int, int>>& v) {
+	// ---
+}
+
+// ---------- CREATE TABLE FILE ---------------------------------------------------------
+TableFile* Huffman::createTableFile(std::map<char, std::pair<int, int>>& m) {
+	// ---
+}
+
+// ---------- READ THE DATAFILE FROM DISK -----------------------------------------------
+DataFile* Huffman::readDataFile(std::ifstream* file) {
+	// ---
+}
+
+// ---------- READ TABLEFILE FROM DISK --------------------------------------------------
+TableFile* Huffman::readTableFile(std::ifstream* file) {
+	// ---
+}
+
+// ---------- WRITE TABLEFILE TO DISK ---------------------------------------------------
+void Huffman::writeTableFile(std::ofstream* file) {
+	// ---
+}
+
+// ---------- WRITE DATAFILE TO DISK ----------------------------------------------------
+void Huffman::writeDataFile(std::ofstream* file) {
+	// ---
 }
