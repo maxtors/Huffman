@@ -54,14 +54,14 @@ private:
     std::map<char, int>* frequencies;
 
     // ---------- PRIVATE FUNCTIONS -----------------------------------------------------
-    std::map<char, int>* getFrequencies(char* data, int size);
-    std::vector<std::pair<int, int>>        buildEncodedResult(char* data, int size);
-    //DataFile*   createDataFile(std::vector<bool>& v);
-    //TableFile*  createTableFile(std::map<char, std::vector<bool>>& m);
-    //DataFile*   readDataFile(ifstream* file);
-    //TableFile*  readTableFile(ifstream* file);
-    //void        writeDataFile(ofstream* file);
-    //void        writeDataFile(ofstream* file);
+    std::map<char, int>*                getFrequencies(char* data, int size);
+    std::vector<std::pair<int, int>>    buildEncodedResult(char* data, int size);
+    DataFile*   createDataFile(std::vector<std::pair<int, int>>& v);
+    TableFile*  createTableFile(std::map<char, std::pair<int, int>>& m);
+    DataFile*   readDataFile(ifstream* file);
+    TableFile*  readTableFile(ifstream* file);
+    void        writeDataFile(ofstream* file);
+    void        writeDataFile(ofstream* file);
     void        Sort(std::vector<Node*>& v);
     void        buildTree();
     void        showTree();
