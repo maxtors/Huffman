@@ -55,12 +55,12 @@ void Huffman::encode(std::string filename) {
         
         // Get the encoded result, create data and table files
         encodedResult = buildEncodedResult(charData, size);
-        createDatafile(encodedResult);
-        createTablefile(encodingMap);
+        createDataFile(encodedResult);
+        createTableFile(*encodingMap);
 		
 		// Write data and table file to disk
-		writeDatafile(datafile);
-		writeTablefile(tablefile);
+		writeDataFile(datafile);
+		writeTableFile(tablefile);
 		
 		/*
 			LAG DENNE DELEN OM TIL EN EGEN FUNKSJON
@@ -183,14 +183,62 @@ void Huffman::showTree() {
 
 // ---------- CREATE DATAFILE -----------------------------------------------------------
 void Huffman::createDataFile(std::vector<std::pair<int, int>>& v) {
-	if (datafile) delete tablefile;
-	datafile = new Datafile;
+    std::vector<std::pair<int, int>>::iterator it;
+	int size, poff, bitpos, temp, bit, charpos, charbitpos;
+
+    if (datafile) delete datafile;
+    datafile = new DataFile;
+    datafile->magicNumber = 0xA0;
+
+    // Calculate the amount if bits in encoded result
+    size = 0;
+    for (it = v.begin(); it != v.end(); it++) size += it->second;
+
+    // Calculate how much padding is needed to be divisible by 8
+    poff = size;
+    while (poff > 0) poff -= 8;
+    poff *= -1;
+    size += poff;
+    size /= 8;
+
+    // Add new data into the datafile struct
+    datafile->size = size;
+    datafile->data = new char[datafile->size];
+    datafile->paddingOffset = poff;
+
+    charpos = 0;
+    charbitpos = 7;
+    // Loop through every single encoded value in the vector
+    for (it = v.begin(); it != v.end(); it++) {
+
+        // Loop through all the bits that are to be inserted into data
+        for (bitpos = it->second-1; bitpos >= 0; bitpos--) {
+
+            // Extract the wanted bit
+            bit = (it->first >> bitpos) & 1;
+
+            // If the amount of bits has overflown size of char, move to next char
+            if (charbitpos < 0) {
+                charbitpos = 7;
+                charpos++;
+            }
+
+            // If this is a new char, sett it to: 0000 0000
+            if (charbitpos == 7) {
+                datafile->data[charpos] = 0x0;
+            }
+
+            // Append the new bit to the char, then itterate to next bit position in char
+            datafile->data[charpos] = (datafile->data[charpos]) | bit << charbitpos;
+            charbitpos--;
+        }
+    }
 }
 
 // ---------- CREATE TABLE FILE ---------------------------------------------------------
 void Huffman::createTableFile(std::map<char, std::pair<int, int>>& m) {
 	if (tablefile) delete tablefile;
-	tablefile = new Tablefile;
+	tablefile = new TableFile;
 }
 
 // ---------- READ THE DATAFILE FROM DISK -----------------------------------------------
@@ -204,11 +252,11 @@ void Huffman::readTableFile(std::string fstr) {
 }
 
 // ---------- WRITE TABLEFILE TO DISK ---------------------------------------------------
-void Huffman::writeTableFile(Tablefile* d) {
+void Huffman::writeTableFile(TableFile* d) {
 	// ---
 }
 
 // ---------- WRITE DATAFILE TO DISK ----------------------------------------------------
-void Huffman::writeDataFile(Datafile* d) {
+void Huffman::writeDataFile(DataFile* d) {
 	// ---
 }

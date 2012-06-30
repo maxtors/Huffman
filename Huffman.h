@@ -28,6 +28,7 @@ private:
     // ---------- STRUCTS ---------------------------------------------------------------
     struct DataFile {
         char  magicNumber;
+        int   size;
         char  paddingOffset;
         char* data;
     };
@@ -66,8 +67,8 @@ private:
     void readTableFile(std::string fstr);
     
     // Write data structs to file
-    void writeTableFile(Tablefile* t);
-    void writeDataFile(Datafile* d);
+    void writeTableFile(TableFile* t);
+    void writeDataFile(DataFile* d);
     
     // DIV
     void Sort(std::vector<Node*>& v);

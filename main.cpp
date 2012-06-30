@@ -8,6 +8,10 @@ int main(int argc, char* argv[]) {
     std::ifstream file;
     Huffman h;
 
+    h.encode("README");
+    std::cout << "\n"; system("pause");
+
+    /*
     try {
         if (argc != 3 && argc != 4) throw "Invalid number of arguments";
 
@@ -42,5 +46,6 @@ int main(int argc, char* argv[]) {
         std::cout << "\t-Encoding: -e filename.type\n";
         std::cout << "\t-Decoding: -d file1.datafile file2.tablefile\n";
     }
+    */
     return 0;
 }
