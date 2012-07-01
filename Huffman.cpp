@@ -257,7 +257,7 @@ void Huffman::readDataFile(std::string fstr) {
 
 // ---------- READ TABLEFILE FROM DISK --------------------------------------------------
 void Huffman::readTableFile(std::string fstr) {
-	// ---
+	
 }
 
 // ---------- WRITE TABLEFILE TO DISK ---------------------------------------------------
