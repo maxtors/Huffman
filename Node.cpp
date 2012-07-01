@@ -4,7 +4,7 @@
 // ---------- NODE (LEAF) CONSTRUCTOR ---------------------------------------------------
 Node::Node(char d, int s, NODE_TYPE t) {
     type = t;
-    data = new char[2]; data[0] = d; data[1] = '\0';
+    data = d;
     frequency = s;
     left = right = NULL;
 }
@@ -12,7 +12,7 @@ Node::Node(char d, int s, NODE_TYPE t) {
 // ---------- NODE (BIND) CONSTRUCTOR ---------------------------------------------------
 Node::Node(Node* l, Node* r, NODE_TYPE t) {
     type = t;
-    data = NULL;
+    data = 0;
     frequency = l->getFrequency() + r->getFrequency();
     left = l;
     right = r;
@@ -20,7 +20,6 @@ Node::Node(Node* l, Node* r, NODE_TYPE t) {
 
 // ---------- NODE DECONSTRUCTOR --------------------------------------------------------
 Node::~Node() {
-    delete data;
     delete left;
     delete right;
 }
