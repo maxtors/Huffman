@@ -32,7 +32,7 @@ int Node::getFrequency() {
 // ---------- FILL NODE WITH DATA -------------------------------------------------------
 void Node::fill(std::map<char, std::pair<int, int>>& enc, int bits, int nbits) {
     if (type == LEAF) {
-        enc[data[0]] = std::pair<int, int>(bits, nbits);
+        enc[data] = std::pair<int, int>(bits, nbits);
     }
     else if (type == BIND) {
         nbits += 1;

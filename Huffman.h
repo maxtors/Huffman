@@ -7,74 +7,68 @@
 #include <string>
 #include "Node.h"
 
+// ---------- STRUCTS -------------------------------------------------------------------
+struct DataFile {
+    char  magicNumber;
+    int   size;
+    char  paddingOffset;
+    char* data;
+};
+    
+struct TableEntry{
+    char data;
+    char size;
+    int  bits;
+};
+    
+struct TableFile {
+    char magicNumber;
+    std::vector<TableEntry> data;
+};
+
+// ---------- TYPEDEFS -------------------------------------------------------------
+typedef std::vector<Node*>          node_v;
+typedef std::vector<int>            int_v;
+typedef std::pair<int, int>         intpair;
+typedef std::vector<intpair>        intpair_v;
+typedef std::map<char, intpair>     char_intpair_m;
+typedef std::map<char, int>         char_int_m;
+typedef std::vector<TableEntry>     TableEntries;
+
 // ---------- HUFFMAN CLASS -------------------------------------------------------------
 class Huffman {
 private:
-    /*
-    DATAFILE:
-    BYTE    0xHF
-    BYTE    PADDING OFFSET
-    CHAR*   DATA
-    
-    TABLEFILE:
-    BYTE    0xHF
-    
-        per entry:
-        CHAR ch
-        CHAR paddingOffset
-        int  data
-    */
-    
-    // ---------- STRUCTS ---------------------------------------------------------------
-    struct DataFile {
-        char  magicNumber;
-        int   size;
-        char  paddingOffset;
-        char* data;
-    };
-    
-    struct TableEntry{
-        char data;
-        char size;
-        int  bits;
-    };
-    
-    struct TableFile {
-        char magicNumber;
-        int  tableSize;
-        std::vector<TableEntry> data;
-    };
 
     // ---------- VARIABLES -------------------------------------------------------------
-    Node*       tree;
-    DataFile*   datafile;
-    TableFile*  tablefile;
-    std::string decodedResult;
-    std::vector<std::pair<int, int>>        encodedResult;
-    std::map<char, std::pair<int, int>>*    encodingMap;
-    std::map<char, int>*                    frequencies;
+    Node*           tree;
+    DataFile*       datafile;
+    TableFile*      tablefile;
+    std::string     decodedResult;
+    intpair_v       encodedResult;
+    char_intpair_m* encodingMap;
+    char_int_m*     frequencies;
 
     // ---------- PRIVATE FUNCTIONS -----------------------------------------------------
-    std::map<char, int>*                getFrequencies(char* data, int size);
-    std::vector<std::pair<int, int>>    buildEncodedResult(char* data, int size);
+    char_int_m* getFrequencies(char* data, int size);
+    intpair_v   buildEncodedResult(char* data, int size);
     
     // Create data structs from private data
-    void createDataFile(std::vector<std::pair<int, int>>& v);
-    void createTableFile(std::map<char, std::pair<int, int>>& m);
+    void createDataFile(intpair_v& v);
+    void createTableFile(char_intpair_m& m);
     
     // Read data structs from file
     void readDataFile(std::string fstr);
     void readTableFile(std::string fstr);
     
     // Write data structs to file
-    void writeTableFile(TableFile* t);
-    void writeDataFile(DataFile* d);
+    void writeTableFile(std::string fstr);
+    void writeDataFile(std::string fstr);
     
     // DIV
-    void Sort(std::vector<Node*>& v);
+    void Sort(node_v& v);
     void buildTree();
     void showTree();
-    void showIntVector(std::vector<int>& v);
+    void showIntVector(int_v& v);
     
 public:
     // ---------- PUBLIC FUNCTIONS ------------------------------------------------------

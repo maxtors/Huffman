@@ -10,7 +10,7 @@
 
 // ---------- CONSTRUCTOR ---------------------------------------------------------------
 Huffman::Huffman() {
-    encodingMap = new std::map<char, std::pair<int, int>>;
+    encodingMap = new char_intpair_m;
     frequencies = NULL;
     datafile 	= NULL;
     tablefile 	= NULL;
@@ -26,10 +26,12 @@ Huffman::~Huffman() {
 
 // ---------- ENCODE STRING -------------------------------------------------------------
 void Huffman::encode(std::string filename) {
-    char* charData;
-    int   size, start, stop;
-    std::string   stringData;
-    std::ifstream file(filename.c_str(), std::ios::binary);
+    char*               charData;
+    int                 size, start, stop;
+    std::string         stringData;
+    std::ifstream       file(filename.c_str(), std::ios::binary);
+    int                 s = 0;
+    intpair_v::iterator it;
     
     if (frequencies) delete frequencies;
 
@@ -59,17 +61,13 @@ void Huffman::encode(std::string filename) {
         createTableFile(*encodingMap);
 		
 		// Write data and table file to disk
-		writeDataFile(datafile);
-		writeTableFile(tablefile);
+		writeDataFile(filename);
+		writeTableFile(filename);
 		
 		/*
 			LAG DENNE DELEN OM TIL EN EGEN FUNKSJON
 		*/
-        int s = 0;
-        std::vector<std::pair<int, int>>::iterator it;
-        for (it = encodedResult.begin(); it != encodedResult.end(); it++) {
-            s += it->second;
-        }
+        for (it = encodedResult.begin(); it != encodedResult.end(); it++) s+=it->second;
 
         float comp = 1 - ((float)s / (float)(size*8));
         std::cout << "\n\nAmount of bits in regular string: " << size * 8;
@@ -85,8 +83,8 @@ void Huffman::decode(std::string data_filename, std::string table_filename) {
 
 // ---------- MAKE ENCODED STRING FROM ENCODING MAP -------------------------------------
 std::vector<std::pair<int, int>> Huffman::buildEncodedResult(char* data, int size) {
-    std::map<char, std::pair<int, int>>::iterator m_it;
-    std::vector<std::pair<int, int>>              result;
+    char_intpair_m::iterator m_it;
+    intpair_v                result;
 
     // Loop through the string the user wants to encode
     for (int i = 0; i < size; i++) {
@@ -99,9 +97,9 @@ std::vector<std::pair<int, int>> Huffman::buildEncodedResult(char* data, int siz
 }
 
 // ---------- GET FREQUENCY OF EACH CHAR ------------------------------------------------
-std::map<char, int>* Huffman::getFrequencies(char* data, int size) {
-    std::map<char, int>*             f = new std::map<char, int>;
-    std::map<char, int>::iterator    f_it;
+char_int_m* Huffman::getFrequencies(char* data, int size) {
+    char_int_m*          f = new char_int_m;
+    char_int_m::iterator f_it;
 	
     // Loop through the parameter string, and treat each character
     for (int i = 0; i < size; i++) {
@@ -116,7 +114,7 @@ std::map<char, int>* Huffman::getFrequencies(char* data, int size) {
 }
 
 // ---------- SORT THE LIST OF NODES ----------------------------------------------------
-void Huffman::Sort(std::vector<Node*>& v) {
+void Huffman::Sort(node_v& v) {
     bool swap = true;
     int  n    = v.size(), i;
 	
@@ -135,10 +133,10 @@ void Huffman::Sort(std::vector<Node*>& v) {
 
 // ---------- BUILD THE HUFFMAN TREE ----------------------------------------------------
 void Huffman::buildTree() {
-    int                                 bits = 0;
-    std::vector<Node*>                  nodes;
-    std::map<char, int>              temp = *frequencies;
-    std::map<char, int>::iterator    f_it, lowest;
+    int                  bits = 0;
+    node_v               nodes;
+    char_int_m           temp = *frequencies;
+    char_int_m::iterator f_it, lowest;
 
     // Loop til map is empty
     while (!temp.empty()) {
@@ -172,7 +170,7 @@ void Huffman::buildTree() {
 
 // ---------- SHOW THE HUFFMAN TREE -----------------------------------------------------
 void Huffman::showTree() {
-    std::map<char, std::pair<int, int>>::iterator e_it;
+    char_intpair_m::iterator e_it;
 
     // Loop through all the characters
     for (e_it = encodingMap->begin(); e_it != encodingMap->end(); e_it++) {
@@ -182,9 +180,9 @@ void Huffman::showTree() {
 }
 
 // ---------- CREATE DATAFILE -----------------------------------------------------------
-void Huffman::createDataFile(std::vector<std::pair<int, int>>& v) {
-    std::vector<std::pair<int, int>>::iterator it;
-	int size, poff, bitpos, temp, bit, charpos, charbitpos;
+void Huffman::createDataFile(intpair_v& v) {
+    intpair_v::iterator it;
+	int size, poff, bitpos, bit, charpos, charbitpos;
 
     if (datafile) delete datafile;
     datafile = new DataFile;
@@ -236,9 +234,20 @@ void Huffman::createDataFile(std::vector<std::pair<int, int>>& v) {
 }
 
 // ---------- CREATE TABLE FILE ---------------------------------------------------------
-void Huffman::createTableFile(std::map<char, std::pair<int, int>>& m) {
+void Huffman::createTableFile(char_intpair_m& m) {
 	if (tablefile) delete tablefile;
 	tablefile = new TableFile;
+    TableEntry temp;
+    char_intpair_m::iterator it;
+
+    tablefile->magicNumber = 0xA0;
+
+    for (it = encodingMap->begin(); it != encodingMap->end(); it++) {
+        temp.data = it->first;
+        temp.bits = it->second.first;
+        temp.size = it->second.second;
+        tablefile->data.push_back(temp);
+    }
 }
 
 // ---------- READ THE DATAFILE FROM DISK -----------------------------------------------
@@ -252,11 +261,39 @@ void Huffman::readTableFile(std::string fstr) {
 }
 
 // ---------- WRITE TABLEFILE TO DISK ---------------------------------------------------
-void Huffman::writeTableFile(TableFile* d) {
-	// ---
+void Huffman::writeTableFile(std::string fstr) {
+	fstr += ".htbl";
+    std::ofstream file(fstr.c_str(), std::ios::binary);
+    TableEntries::iterator it;
+
+    if (!file) {
+        throw "Could not write Tablefile for encoded data";
+    }
+    else {
+        file.write(&tablefile->magicNumber, 1);
+
+        for (it = tablefile->data.begin(); it != tablefile->data.end(); it++) {
+            file.write(&it->data, 1);
+            file.write(&it->size, 1);
+            file.write((char*)&it->bits, 4);
+        }
+    }
+    file.close();
 }
 
 // ---------- WRITE DATAFILE TO DISK ----------------------------------------------------
-void Huffman::writeDataFile(DataFile* d) {
-	// ---
+void Huffman::writeDataFile(std::string fstr) {
+	fstr += ".hdta";
+    std::ofstream file(fstr.c_str(), std::ios::binary);
+
+    if (!file) {
+        throw "Could not write Datafile for encoded data";
+    }
+    else {
+        file.write(&datafile->magicNumber, 1);
+        file.write((char*)&datafile->size, 4);
+        file.write(&datafile->paddingOffset, 1);
+        file.write((char*)datafile->data, datafile->size);
+    }
+    file.close();
 }
