@@ -251,35 +251,36 @@ void Huffman::createTableFile(char_intpair_m& m) {
 }
 
 // ---------- READ THE DATAFILE FROM DISK -----------------------------------------------
-void Huffman::readDataFile(std::string fstr) {
+bool Huffman::readDataFile(std::string fstr) {
 	// ---
+	return false;
 }
 
 // ---------- READ TABLEFILE FROM DISK --------------------------------------------------
-void Huffman::readTableFile(std::string fstr) {
+bool Huffman::readTableFile(std::string fstr) {
 	char charbuffer;
 	char buffer[256];
 	TableEntry temp;
 	
 	if (tablefile) delete tablefile;
-	tablefile = new Tablefile;
+	tablefile =    new Tablefile;
 	
 	std::ifstream file(fstr.c_str(), std::ios::binary);
 	
 	if (!file) {
-		// ... error
+		std::cout << "Could not open tablefile\n";
+		file.close();
+		return false;
 	}
 	else {
 		
 		// Read magic number and check contents
 		file.read(&charbuffer, 1);
 		if (charbuffer != 0xA0) {
-			// ... error
+			std::cout << "Invalid tablefile\n";
+			file.close();
+			return false;
 		}
-		
-		/*
-			!!! HELE DENNE MÅ BLI MERE ROBUST !!!
-        */
 		
         try {
         // Read the table entries
@@ -306,23 +307,23 @@ void Huffman::readTableFile(std::string fstr) {
         catch (char* err) {
             file.close();
             std::cout << err << "\n";
-            /*
-                KANSKJE INFØRE BOOL RETURN FOR Å SJEKKE INNLESNING?
-            */
-            //return false;
+            return false;
         }
-        file.close();
 	}
+	file.close();
+    return true;
 }
 
 // ---------- WRITE TABLEFILE TO DISK ---------------------------------------------------
-void Huffman::writeTableFile(std::string fstr) {
+bool Huffman::writeTableFile(std::string fstr) {
 	fstr += ".htbl";
     std::ofstream file(fstr.c_str(), std::ios::binary);
     TableEntries::iterator it;
 
     if (!file) {
-        throw "Could not write Tablefile for encoded data";
+        std::cout << "Could not write Tablefile for encoded data\n";
+        file.close();
+        return false;
     }
     else {
         file.write(&tablefile->magicNumber, 1);
@@ -334,15 +335,18 @@ void Huffman::writeTableFile(std::string fstr) {
         }
     }
     file.close();
+    return true;
 }
 
 // ---------- WRITE DATAFILE TO DISK ----------------------------------------------------
-void Huffman::writeDataFile(std::string fstr) {
+bool Huffman::writeDataFile(std::string fstr) {
 	fstr += ".hdta";
     std::ofstream file(fstr.c_str(), std::ios::binary);
 
     if (!file) {
-        throw "Could not write Datafile for encoded data";
+        std::cout << "Could not write Datafile for encoded data\n";
+        file.close();
+        return false;
     }
     else {
         file.write(&datafile->magicNumber, 1);
@@ -351,4 +355,5 @@ void Huffman::writeDataFile(std::string fstr) {
         file.write((char*)datafile->data, datafile->size);
     }
     file.close();
+    return true;
 }
