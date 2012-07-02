@@ -53,8 +53,8 @@ private:
     intpair_v   buildEncodedResult(char* data, int size);
     
     // Create data structs from private data
-    bool createDataFile(intpair_v& v);
-    bool createTableFile(char_intpair_m& m);
+    void createDataFile(intpair_v& v);
+    void createTableFile(char_intpair_m& m);
     
     // Read data structs from file
     bool readDataFile(std::string fstr);
