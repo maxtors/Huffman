@@ -61,8 +61,8 @@ void Huffman::encode(std::string filename) {
         createTableFile(*encodingMap);
 		
 		// Write data and table file to disk
-		writeDataFile(filename);
-		writeTableFile(filename);
+		if (!writeDataFile(filename)) return;
+		if (!writeTataFile(filename)) return;
 		
 		/*
 			LAG DENNE DELEN OM TIL EN EGEN FUNKSJON
