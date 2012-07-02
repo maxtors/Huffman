@@ -279,26 +279,39 @@ void Huffman::readTableFile(std::string fstr) {
 		
 		/*
 			!!! HELE DENNE MÅ BLI MERE ROBUST !!!
-		*/
+        */
 		
-		// Read the table entries
-		while (!file.eof()) {
-			
-			// Read the char in question
-			file.read(&charbuffer, 1);
-			temp.data = charbuffer;
-			
-			// Read the size (number of bits) this encoded char uses
-			file.read(&charbuffer, 1);
-			temp.size = charbuffer;
-			
-			// Read the bits for this encoded char
-			file.read(buffer, 4);
-			temp.bits = (int)buffer;
-			
-			// Append the new entry into the data vector
-			tablefile->data.push_back(temp);
-		}
+        try {
+        // Read the table entries
+            while (!file.eof()) {
+                // Read the char in question
+                file.read(&charbuffer, 1);
+                temp.data = charbuffer;
+                if (file.fail()) throw "Error reading tablefile";
+                
+                // Read the size (number of bits) this encoded char uses
+                file.read(&charbuffer, 1);
+                temp.size = charbuffer;
+			    if (file.fail()) throw "Error reading tablefile";
+            
+                // Read the bits for this encoded char
+                file.read(buffer, 4);
+                temp.bits = (int)buffer;
+    			if (file.fail()) throw "Error reading tablefile";
+                
+                // Append the new entry into the data vector
+                tablefile->data.push_back(temp);
+            }
+        }
+        catch (char* err) {
+            file.close();
+            std::cout << err << "\n";
+            /*
+                KANSKJE INFØRE BOOL RETURN FOR Å SJEKKE INNLESNING?
+            */
+            //return false;
+        }
+        file.close();
 	}
 }
 
