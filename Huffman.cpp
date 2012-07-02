@@ -257,7 +257,49 @@ void Huffman::readDataFile(std::string fstr) {
 
 // ---------- READ TABLEFILE FROM DISK --------------------------------------------------
 void Huffman::readTableFile(std::string fstr) {
+	char charbuffer;
+	char buffer[256];
+	TableEntry temp;
 	
+	if (tablefile) delete tablefile;
+	tablefile = new Tablefile;
+	
+	std::ifstream file(fstr.c_str(), std::ios::binary);
+	
+	if (!file) {
+		// ... error
+	}
+	else {
+		
+		// Read magic number and check contents
+		file.read(&charbuffer, 1);
+		if (charbuffer != 0xA0) {
+			// ... error
+		}
+		
+		/*
+			!!! HELE DENNE MÅ BLI MERE ROBUST !!!
+		*/
+		
+		// Read the table entries
+		while (!file.eof()) {
+			
+			// Read the char in question
+			file.read(&charbuffer, 1);
+			temp.data = charbuffer;
+			
+			// Read the size (number of bits) this encoded char uses
+			file.read(&charbuffer, 1);
+			temp.size = charbuffer;
+			
+			// Read the bits for this encoded char
+			file.read(buffer, 4);
+			temp.bits = (int)buffer;
+			
+			// Append the new entry into the data vector
+			tablefile->data.push_back(temp);
+		}
+	}
 }
 
 // ---------- WRITE TABLEFILE TO DISK ---------------------------------------------------
