@@ -53,16 +53,16 @@ private:
     intpair_v   buildEncodedResult(char* data, int size);
     
     // Create data structs from private data
-    void createDataFile(intpair_v& v);
-    void createTableFile(char_intpair_m& m);
+    bool createDataFile(intpair_v& v);
+    bool createTableFile(char_intpair_m& m);
     
     // Read data structs from file
-    void readDataFile(std::string fstr);
-    void readTableFile(std::string fstr);
+    bool readDataFile(std::string fstr);
+    bool readTableFile(std::string fstr);
     
     // Write data structs to file
-    void writeTableFile(std::string fstr);
-    void writeDataFile(std::string fstr);
+    bool writeTableFile(std::string fstr);
+    bool writeDataFile(std::string fstr);
     
     // DIV
     void Sort(node_v& v);
