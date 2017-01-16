@@ -62,7 +62,7 @@ void Huffman::encode(std::string filename) {
 		
 		// Write data and table file to disk
 		if (!writeDataFile(filename)) return;
-		if (!writeTataFile(filename)) return;
+		if (!writeTableFile(filename)) return;
 		
 		/*
 			LAG DENNE DELEN OM TIL EN EGEN FUNKSJON
@@ -263,7 +263,7 @@ bool Huffman::readTableFile(std::string fstr) {
 	TableEntry temp;
 	
 	if (tablefile) delete tablefile;
-	tablefile =    new Tablefile;
+	tablefile =    new TableFile;
 	
 	std::ifstream file(fstr.c_str(), std::ios::binary);
 	
